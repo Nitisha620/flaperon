@@ -7,14 +7,13 @@ Future<BitmapDescriptor> getMarkerIcon(Color color,
     bool isIcon = false,
     IconData? icon,
     Color? iconColor,
-    ui.Image? customImage}) async {
+    ui.Image? customImage,
+    bool isStart = false}) async {
   final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
   final Canvas canvas = Canvas(pictureRecorder);
 
   double width = 130.0;
-  double circleRadius = (isIcon && icon == Icons.motorcycle_outlined)
-      ? 55.0
-      : (isIcon ? 45.0 : 38.0);
+  double circleRadius = (isStart) ? 55.0 : (isIcon ? 45.0 : 38.0);
   double tailLength = 12.0;
   double topPadding = 15.0;
   double totalHeight = topPadding + (circleRadius * 2) + tailLength;
@@ -23,7 +22,7 @@ Future<BitmapDescriptor> getMarkerIcon(Color color,
   if (customImage != null) {
     canvas.drawImage(customImage, Offset.zero, Paint());
   } else {
-    if (isIcon && icon == Icons.motorcycle_outlined) {
+    if (isStart) {
       final Path bikePath = Path()
         ..addOval(Rect.fromCircle(center: center, radius: circleRadius));
       canvas.drawShadow(bikePath, Colors.black, 4.0, true);
@@ -71,9 +70,7 @@ Future<BitmapDescriptor> getMarkerIcon(Color color,
     TextPainter textPainter = TextPainter(textDirection: TextDirection.ltr);
 
     // Specifically make the bike icon larger
-    double finalFontSize = (isIcon && icon == Icons.motorcycle_outlined)
-        ? 65.0
-        : (isIcon ? 42.0 : 38.0);
+    double finalFontSize = isStart ? 65.0 : (isIcon ? 42.0 : 38.0);
 
     textPainter.text = TextSpan(
       text: isIcon ? String.fromCharCode(icon!.codePoint) : text,
